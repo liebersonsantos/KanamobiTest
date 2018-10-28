@@ -2,8 +2,8 @@ package com.liebersonsantos.kanamobitest.contract;
 
 import android.content.Context;
 
-import com.liebersonsantos.kanamobitest.model.Item;
-import com.liebersonsantos.kanamobitest.model.RepositoryResponse;
+import com.liebersonsantos.kanamobitest.model.repositories.Item;
+import com.liebersonsantos.kanamobitest.model.repositories.RepositoryResponse;
 
 import java.util.List;
 
@@ -28,13 +28,9 @@ public class RepositoryContract {
         void attachView(RepositoryContract.View view);
         void detachView();
         void getRepository(int page);
-
+        void onResume();
         void showRepositories(List<Item> response);
 
         void showRepositoryError(Throwable t);
-
-
-
-
     }
 }

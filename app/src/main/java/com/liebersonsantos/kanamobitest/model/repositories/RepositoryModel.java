@@ -1,4 +1,4 @@
-package com.liebersonsantos.kanamobitest.model;
+package com.liebersonsantos.kanamobitest.model.repositories;
 
 import com.liebersonsantos.kanamobitest.contract.RepositoryContract;
 import com.liebersonsantos.kanamobitest.model.service.ApiService;
@@ -17,6 +17,6 @@ public class RepositoryModel implements RepositoryContract.Model {
 
     @Override
     public Single<RepositoryResponse> getRepository(String language, String stars, int page) {
-        return  ApiService.getInstance(view).getRepositories(language, stars, page);
+        return ApiService.getInstance(view).getRepositories(language, stars, page);
     }
 }

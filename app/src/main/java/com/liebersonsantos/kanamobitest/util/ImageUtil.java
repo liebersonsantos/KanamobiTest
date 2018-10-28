@@ -15,7 +15,6 @@ import com.squareup.picasso.Transformation;
 public class ImageUtil {
 
     public static void loadImage(String url, ImageView imageView, ProgressBar progressBar) {
-
         progressBar.setVisibility(View.VISIBLE);
 
         if (url == null) {
@@ -25,7 +24,7 @@ public class ImageUtil {
 
         Picasso.get()
                 .load(url)
-                .networkPolicy(NetworkPolicy.OFFLINE)
+                .networkPolicy(NetworkPolicy.NO_CACHE)
                 .transform(new BitmapTransform(1024, 768))
                 .resize(512, 512)
                 .into(imageView, new Callback() {

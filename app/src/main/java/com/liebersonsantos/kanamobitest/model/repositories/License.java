@@ -1,4 +1,4 @@
-package com.liebersonsantos.kanamobitest.model;
+package com.liebersonsantos.kanamobitest.model.repositories;
 
 import android.os.Parcel;
 import android.os.Parcelable;

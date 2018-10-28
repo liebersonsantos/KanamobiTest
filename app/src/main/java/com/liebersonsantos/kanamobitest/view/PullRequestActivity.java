@@ -3,20 +3,24 @@ package com.liebersonsantos.kanamobitest.view;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.liebersonsantos.kanamobitest.R;
-import com.liebersonsantos.kanamobitest.contract.RepositoryContract;
-import com.liebersonsantos.kanamobitest.listners.EndlessRecyclerViewListener;
+import com.liebersonsantos.kanamobitest.contract.PullRequestContract;
+import com.liebersonsantos.kanamobitest.model.pullRequests.PullResquestResponse;
 import com.liebersonsantos.kanamobitest.model.repositories.Item;
-import com.liebersonsantos.kanamobitest.presenter.RepositoryPresenter;
-import com.liebersonsantos.kanamobitest.view.adapter.RepositoryAdapter;
+import com.liebersonsantos.kanamobitest.presenter.PullRequestPresenter;
+import com.liebersonsantos.kanamobitest.view.adapter.PullResquestAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,56 +28,79 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements RepositoryContract.View {
+public class PullRequestActivity extends AppCompatActivity implements PullRequestContract.View{
 
-    private RepositoryContract.Presenter presenter;
-    private List<Item> items = new ArrayList<>();
-    private RepositoryAdapter adapter;
+    private PullRequestContract.Presenter presenter;
+    private List<PullResquestResponse> responseList = new ArrayList<>();
+    private PullResquestAdapter adapter;
 
-    @BindView(R.id.recyclerView)
+    private String owner;
+    private String repositoryName;
+    private Item item;
+
+    @BindView(R.id.text_opened)
+    TextView openedText;
+    @BindView(R.id.text_closed)
+    TextView closedText;
+    @BindView(R.id.recycler_view_pull)
     RecyclerView recyclerView;
-    @BindView(R.id.progressBar)
+    @BindView(R.id.arrow_back)
+    ImageView imageBack;
+    @BindView(R.id.toolbar_text)
+    TextView textToolbar;
+    @BindView(R.id.progress_content_pull)
     ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_pull_request);
         ButterKnife.bind(this);
 
-        presenter = new RepositoryPresenter();
+        presenter = new PullRequestPresenter();
         presenter.attachView(this);
 
-        setRecyclerView();
-    }
+        unBundle();
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.onResume();
+        presenter.getPullRequest(owner, repositoryName);
+        settingToolbar();
+
+        setRecyclerView();
+
     }
 
     private void setRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        adapter = new RepositoryAdapter(items);
-
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                presenter.getRepository(page);
-            }
-        });
-
+        adapter = new PullResquestAdapter(responseList);
         recyclerView.setAdapter(adapter);
+    }
 
+    private void settingToolbar() {
+        textToolbar.setText(repositoryName);
+        imageBack.setVisibility(View.VISIBLE);
+        goHome();
+    }
+
+    private void goHome() {
+        imageBack.setOnClickListener(v -> {
+            Intent intent = new Intent(PullRequestActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    private void unBundle() {
+        owner = getIntent().getStringExtra(Navigation.OWNER);
+        repositoryName = getIntent().getStringExtra(Navigation.REPOSITORY_NAME);
+        Log.i("TAG", "unBundle: -------------------------------> " + owner + "------" + repositoryName);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.detachView();
+    public Context getContext() {
+        return this;
     }
 
     @Override
@@ -104,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements RepositoryContrac
     }
 
     @Override
-    public void showRepositories(List<Item> response) {
-        if (!response.isEmpty()){
-            adapter.update(response);
+    public void showRepositories(List<PullResquestResponse> responseList) {
+        if (!responseList.isEmpty()){
+            adapter.update(responseList);
         }
-
     }
 
     @Override
@@ -117,9 +143,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryContrac
     }
 
     @Override
-    public Context getContext() {
-        return this;
+    public void updateOpenClosed(String open, String closed) {
+        openedText.setText(getString(R.string.open, open));
+        closedText.setText(getString(R.string.closed, closed));
     }
-
-
 }

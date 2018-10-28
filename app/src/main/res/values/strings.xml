@@ -5,4 +5,6 @@
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</string>
     <string name="user_name_main">userName</string>
     <string name="name_main">Name and Last Name</string>
+    <string name="open">%1$s open/</string>
+    <string name="closed">%1$s closed</string>
 </resources>

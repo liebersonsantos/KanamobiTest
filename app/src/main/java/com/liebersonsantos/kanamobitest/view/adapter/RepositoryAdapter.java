@@ -1,7 +1,11 @@
-package com.liebersonsantos.kanamobitest.view;
+package com.liebersonsantos.kanamobitest.view.adapter;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.liebersonsantos.kanamobitest.R;
-import com.liebersonsantos.kanamobitest.model.Item;
+import com.liebersonsantos.kanamobitest.model.repositories.Item;
 import com.liebersonsantos.kanamobitest.util.ImageUtil;
+import com.liebersonsantos.kanamobitest.view.Navigation;
+import com.liebersonsantos.kanamobitest.view.PullRequestActivity;
 
 import java.util.List;
 
@@ -19,6 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.ViewHolder> {
 
     private List<Item> repositories;
+    private Navigation navigation = new Navigation();
 
     public RepositoryAdapter(List<Item> repositories) {
         this.repositories = repositories;
@@ -28,7 +35,7 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_main, parent,false);
+                .inflate(R.layout.item_main, parent, false);
 
         return new RepositoryAdapter.ViewHolder(view);
     }
@@ -36,6 +43,13 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(repositories.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = navigation.goToPullRequestActivity((Activity) v.getContext(), repositories.get(position));
+                v.getContext().startActivity(intent);
+            }
+        });
 
     }
 
@@ -51,9 +65,9 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
         private TextView numberForks;
         private TextView numberStars;
         private TextView userName;
-        private TextView nameAndLastName;
         private ProgressBar progress;
         private CircleImageView imageUser;
+        private CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -63,25 +77,31 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
             numberForks = itemView.findViewById(R.id.number_forks);
             numberStars = itemView.findViewById(R.id.number_star);
             userName = itemView.findViewById(R.id.user_name_main);
-            nameAndLastName = itemView.findViewById(R.id.name_last_name);
             progress = itemView.findViewById(R.id.progress);
             imageUser = itemView.findViewById(R.id.circle_image_main);
+            cardView = itemView.findViewById(R.id.card_main);
         }
 
-        public  void bind(Item item){
+        public void bind(Item item) {
 
             nameRepository.setText(item.getName());
             descriptionRepository.setText(item.getDescription() + "...");
             numberForks.setText(String.valueOf(item.getForks()));
             numberStars.setText(String.valueOf(item.getStargazersCount()));
             userName.setText(item.getOwner().getLogin());
-            nameAndLastName.setText(item.getFullName());
             ImageUtil.loadImage(item.getOwner().getAvatarUrl(), imageUser, progress);
-        }
-    }
 
+//            cardView.setOnClickListener(v -> {
+//                Log.i("TAG", "bind:ADAPTER ----------------------------------> " + item.getOwner().getLogin());
+//                Log.i("TAG", "bind:ADAPTER ----------------------------------> " + item.getName());
+//
+//
+//            });
+
+        }
+
+    }
     public void update(List<Item> repositories) {
-        this.repositories.clear();
         this.repositories.addAll(repositories);
         notifyDataSetChanged();
     }

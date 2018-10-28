@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.liebersonsantos.kanamobitest.BuildConfig;
+import com.liebersonsantos.kanamobitest.contract.PullRequestContract;
 import com.liebersonsantos.kanamobitest.contract.RepositoryContract;
 
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,29 @@ public class ApiService {
     private static Retrofit retrofit;
 
     public static Api getInstance(RepositoryContract.View context) {
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .addInterceptor(getRewriteCacheControlInterceptor(isConected((Context) context)))
+                .readTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        if (retrofit == null) {
+
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BuildConfig.BASE_URL)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(okHttpClient)
+                    .build();
+
+        }
+        return retrofit.create(Api.class);
+    }
+
+    public static Api getInstancePull(PullRequestContract.View context) {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())

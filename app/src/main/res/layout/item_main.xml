@@ -7,6 +7,7 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -34,7 +35,7 @@
                 android:layout_marginEnd="36dp"
                 android:layout_marginRight="36dp"
                 android:text="@string/repository_name"
-                android:textColor="#444191"
+                android:textColor="@color/colorTitle"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/circle_image_main"
@@ -79,18 +80,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/circle_image_main"
                 app:layout_constraintStart_toStartOf="@+id/circle_image_main"
                 app:layout_constraintTop_toBottomOf="@+id/circle_image_main" />
-
-            <TextView
-                android:id="@+id/name_last_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="@string/name_main"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/user_name_main" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline"
