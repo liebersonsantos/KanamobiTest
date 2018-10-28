@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryContrac
         });
 
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override
@@ -108,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryContrac
         if (!response.isEmpty()){
             adapter.update(response);
         }
-
     }
 
     @Override
@@ -120,6 +118,5 @@ public class MainActivity extends AppCompatActivity implements RepositoryContrac
     public Context getContext() {
         return this;
     }
-
 
 }

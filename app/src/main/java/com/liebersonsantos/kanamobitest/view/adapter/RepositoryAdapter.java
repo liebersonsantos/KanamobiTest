@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.liebersonsantos.kanamobitest.R;
 import com.liebersonsantos.kanamobitest.model.repositories.Item;
 import com.liebersonsantos.kanamobitest.util.ImageUtil;
 import com.liebersonsantos.kanamobitest.view.Navigation;
-import com.liebersonsantos.kanamobitest.view.PullRequestActivity;
 
 import java.util.List;
 
@@ -43,12 +41,9 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(repositories.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = navigation.goToPullRequestActivity((Activity) v.getContext(), repositories.get(position));
-                v.getContext().startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = navigation.goToPullRequestActivity((Activity) v.getContext(), repositories.get(position));
+            v.getContext().startActivity(intent);
         });
 
     }
@@ -90,14 +85,6 @@ public class RepositoryAdapter extends RecyclerView.Adapter<RepositoryAdapter.Vi
             numberStars.setText(String.valueOf(item.getStargazersCount()));
             userName.setText(item.getOwner().getLogin());
             ImageUtil.loadImage(item.getOwner().getAvatarUrl(), imageUser, progress);
-
-//            cardView.setOnClickListener(v -> {
-//                Log.i("TAG", "bind:ADAPTER ----------------------------------> " + item.getOwner().getLogin());
-//                Log.i("TAG", "bind:ADAPTER ----------------------------------> " + item.getName());
-//
-//
-//            });
-
         }
 
     }

@@ -3,7 +3,6 @@ package com.liebersonsantos.kanamobitest.contract;
 import android.content.Context;
 
 import com.liebersonsantos.kanamobitest.model.pullRequests.PullResquestResponse;
-import com.liebersonsantos.kanamobitest.model.repositories.Item;
 
 import java.util.List;
 
